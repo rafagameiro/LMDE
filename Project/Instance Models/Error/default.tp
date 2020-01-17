@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tp:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tp="tp">
+  <packages name="default">
+    <classes xsi:type="tp:ClassNormalD" name="Main">
+      <vars visibility="-" name="ID" type="String"/>
+    </classes>
+    <classes xsi:type="tp:ClassNormalD" name="Main">
+      <vars visibility="+" name="balance" type="Integer"/>
+    </classes>
+  </packages>
+  <transitions xsi:type="tp:Relationship" source="//@packages.0/@classes.1" target="//@packages.0/@classes.1"/>
+</tp:Diagram>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:tp="tp" xmi:id="_J38ScCT4EeqQ8oTfqBqO0Q" type="Tp" name="error.tp_diagram" measurementUnit="Pixel">
+  <children xmi:type="notation:Node" xmi:id="_KeD3QCT4EeqQ8oTfqBqO0Q" type="2001">
+    <children xmi:type="notation:DecorationNode" xmi:id="_KeFFYCT4EeqQ8oTfqBqO0Q" type="5006"/>
+    <children xmi:type="notation:BasicCompartment" xmi:id="_KeFscCT4EeqQ8oTfqBqO0Q" type="7001">
+      <children xmi:type="notation:Shape" xmi:id="_LpXMwCT4EeqQ8oTfqBqO0Q" type="3005" fontName="Segoe UI">
+        <children xmi:type="notation:DecorationNode" xmi:id="_LpXMwyT4EeqQ8oTfqBqO0Q" type="5005"/>
+        <children xmi:type="notation:BasicCompartment" xmi:id="_LpXz0CT4EeqQ8oTfqBqO0Q" type="7005">
+          <children xmi:type="notation:Shape" xmi:id="_OD1EECT4EeqQ8oTfqBqO0Q" type="3002" fontName="Segoe UI">
+            <children xmi:type="notation:DecorationNode" xmi:id="_OD1EEiT4EeqQ8oTfqBqO0Q" type="5001"/>
+            <element xmi:type="tp:Var" href="default.tp#//@packages.0/@classes.0/@vars.0"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_OD1EEST4EeqQ8oTfqBqO0Q" x="35" y="19" width="111" height="81"/>
+          </children>
+        </children>
+        <children xmi:type="notation:BasicCompartment" xmi:id="_LpXz0ST4EeqQ8oTfqBqO0Q" type="7006"/>
+        <styles xmi:type="notation:HintedDiagramLinkStyle" xmi:id="_LpXMwST4EeqQ8oTfqBqO0Q"/>
+        <element xmi:type="tp:ClassNormalD" href="default.tp#//@packages.0/@classes.0"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_LpXMwiT4EeqQ8oTfqBqO0Q" x="25" y="34" width="331" height="316"/>
+      </children>
+      <children xmi:type="notation:Shape" xmi:id="_Mii3gCT4EeqQ8oTfqBqO0Q" type="3005" fontName="Segoe UI">
+        <children xmi:type="notation:DecorationNode" xmi:id="_Mii3gyT4EeqQ8oTfqBqO0Q" type="5005"/>
+        <children xmi:type="notation:BasicCompartment" xmi:id="_MijekCT4EeqQ8oTfqBqO0Q" type="7005">
+          <children xmi:type="notation:Shape" xmi:id="_QPo0UCT4EeqQ8oTfqBqO0Q" type="3002" fontName="Segoe UI">
+            <children xmi:type="notation:DecorationNode" xmi:id="_QPo0UiT4EeqQ8oTfqBqO0Q" type="5001"/>
+            <element xmi:type="tp:Var" href="default.tp#//@packages.0/@classes.1/@vars.0"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_QPo0UST4EeqQ8oTfqBqO0Q" x="20" y="39" width="106" height="66"/>
+          </children>
+        </children>
+        <children xmi:type="notation:BasicCompartment" xmi:id="_MijekST4EeqQ8oTfqBqO0Q" type="7006"/>
+        <styles xmi:type="notation:HintedDiagramLinkStyle" xmi:id="_Mii3gST4EeqQ8oTfqBqO0Q"/>
+        <element xmi:type="tp:ClassNormalD" href="default.tp#//@packages.0/@classes.1"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Mii3giT4EeqQ8oTfqBqO0Q" x="515" y="39" width="241" height="306"/>
+      </children>
+    </children>
+    <styles xmi:type="notation:DescriptionStyle" xmi:id="_KeD3QST4EeqQ8oTfqBqO0Q"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_KeD3QiT4EeqQ8oTfqBqO0Q" fontName="Segoe UI"/>
+    <styles xmi:type="notation:HintedDiagramLinkStyle" xmi:id="_KeD3QyT4EeqQ8oTfqBqO0Q"/>
+    <element xmi:type="tp:Package" href="default.tp#//@packages.0"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_KeD3RCT4EeqQ8oTfqBqO0Q" x="155" y="85" width="856" height="441"/>
+  </children>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_J38ScST4EeqQ8oTfqBqO0Q"/>
+  <element xmi:type="tp:Diagram" href="default.tp#/"/>
+  <edges xmi:type="notation:Connector" xmi:id="_TPqPwCT4EeqQ8oTfqBqO0Q" type="4004" source="_Mii3gCT4EeqQ8oTfqBqO0Q" target="_Mii3gCT4EeqQ8oTfqBqO0Q">
+    <styles xmi:type="notation:FontStyle" xmi:id="_TPqPwST4EeqQ8oTfqBqO0Q" fontName="Segoe UI"/>
+    <element xmi:type="tp:Relationship" href="default.tp#//@transitions.0"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_TPqPwiT4EeqQ8oTfqBqO0Q" points="[222, 9, 204, -33]$[284, 9, 266, -33]$[226, 125, 208, 83]$[128, 86, 110, 44]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_TP0n0CT4EeqQ8oTfqBqO0Q" id="(0.07883817427385892,0.7189542483660131)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_TP0n0ST4EeqQ8oTfqBqO0Q" id="(0.15352697095435686,0.8562091503267973)"/>
+  </edges>
+</notation:Diagram>

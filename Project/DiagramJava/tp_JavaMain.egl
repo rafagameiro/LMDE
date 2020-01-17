@@ -1,0 +1,10 @@
+[%
+
+var implementation : Template; 
+for (c in ClassD.all) {	
+	implementation = TemplateFactory.load("tp_JavaClass.egl");
+	implementation.populate("root", c);
+	implementation.generate("Java/" + c.name + ".java");
+}
+
+%]

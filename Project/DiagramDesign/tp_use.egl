@@ -1,0 +1,32 @@
+model DesignDiagram
+
+--classes 
+
+[% for(c in ClassD.all) { %]
+[%if(c.isTypeOf(ClassAbstractD)) {%]abstract [%}%]class [%=c.name%] [%for(t in Transition.all) {%][%if(t.isTypeOf(Hierarchy) and t.source.name == c.name) {%] < [%=t.target.name%][%}%][%}%]
+
+attributes
+[% for(v in c.vars) { %]
+	[%=v.name%] : [%=v.type%]
+[%}%]
+operations
+[% 
+var i = 0; 
+for(f in c.functions) { %]
+	[%=f.name.substring(0, f.name.length()-2)%]([% for(arg in f.args) {%][%if(i > 0)%{%], [%}%][%=arg.name%] : [%=arg.type%][%i++; }%]) : [%=f.type%]
+	[%}%]
+end
+
+[%}%]
+--associations
+
+[% for(t in Transition.all) {%]
+[% if(t.isTypeOf(Composition) or t.isTypeOf(Aggregation)) {%]
+association [%=t.relationName%] between
+	[%=t.source.name%] [[%=t.sourceNumber%]] role [%=t.sourceRole%]
+	[%=t.target.name%] [[%=t.targetNumber%]] role [%=t.targetRole%]
+end
+
+[%}%]
+[%}%]
+

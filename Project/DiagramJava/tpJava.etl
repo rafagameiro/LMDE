@@ -1,0 +1,87 @@
+rule Package 
+	transform t : tp!Package 
+	to n : tpJava!Package {  
+		n.name = t.name;  
+		n.classes = t.classes.equivalent();
+	}
+	
+rule ClassNormal  
+	transform t : tp!ClassNormalD 
+	to n : tpJava!ClassNormalD {  
+		n.name = t.name;  
+		n.vars = t.vars.equivalent();
+		n.functions = t.functions.equivalent();
+	}
+	
+rule ClassAbstract
+	transform t : tp!ClassAbstractD
+	to n : tpJava!ClassAbstractD {  
+		n.name = t.name;  
+		n.vars = t.vars.equivalent();
+		n.functions = t.functions.equivalent();
+	}
+
+	
+rule Vars
+	transform t : tp!Var
+	to n : tpJava!Var {  
+		n.name = t.name;  
+		if (t.visibility == "+")
+			n.visibility = "public";
+		else
+			n.visibility = "private";
+		n.type = t.type;
+	}
+	
+rule Funcs
+	transform t : tp!Func
+	to n : tpJava!Func {  
+		n.name = t.name;  
+		if (t.visibility == "+")
+			n.visibility = "public";
+		else
+			n.visibility = "private";
+		n.type = t.type;
+		n.args = t.args.equivalent();
+	}
+	
+rule Args
+	transform t : tp!Args
+	to n : tpJava!Args {  
+		n.name = t.name;  
+		n.type = t.type;
+	}
+
+rule Hierarchy
+	transform t : tp!Hierarchy
+	to n : tpJava!Hierarchy {  
+		n.source = t.source.equivalent();  
+		n.target = t.target.equivalent();
+	}
+	
+rule Composition
+transform t : tp!Composition
+to n : tpJava!Var {  
+	
+	n.name = t.relationName;  
+	n.visibility = "public";
+	n.type = "Collection<" +t.target.equivalent().name+">";
+	
+	t.source.equivalent().vars.add(n);
+}
+
+rule Aggregation
+transform t : tp!Aggregation
+to n : tpJava!Var {  
+	
+	
+	
+	n.name = t.relationName;  
+	n.visibility = "public";
+	n.type = "Collection<" +t.target.equivalent().name+">";
+	
+	t.source.equivalent().vars.add(n);
+}
+
+
+	

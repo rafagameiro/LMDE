@@ -1,0 +1,73 @@
+@namespace(uri="tpJava", prefix="tpJava")
+package tpJava;
+
+@gmf.diagram
+class Diagram {
+	val Package[*] packages;
+	val Hierarchy[*] transitions;
+}
+
+@gmf.node(figure="rounded", label.icon="false", label="name", label.pattern="{0}", border.color="0,0,0")
+class Package {
+	attr String name;
+	
+	@gmf.compartment
+	val ClassD[*] classes;
+}
+
+@gmf.link(source="source", target="target", target.decoration="closedarrow", source.decoration="none")
+class Hierarchy {
+	ref ClassD source;
+	ref ClassD target;
+}
+
+abstract class ClassD {
+	attr String name;
+	
+	@gmf.compartment
+	val Var[*] vars;
+	
+	@gmf.compartment
+	val Func[*] functions;
+	
+}
+
+@gmf.node(figure="rounded", label.icon="false", label="name", label.pattern="{0}", border.color="255,0,0")
+class ClassAbstractD extends ClassD {
+}
+
+@gmf.node(figure="rounded", label.icon="false", label="name", label.pattern="{0}")
+class ClassNormalD extends ClassD{
+}
+
+@gmf.node(figure="rounded", label.icon="false", label="visibility,type,name", label.pattern="{0} {1} {2}")
+class Var {
+	
+	attr String visibility;
+	
+	attr String name;
+	
+	attr String type;
+	
+}
+
+@gmf.node(figure="rounded", label.icon="false", label="visibility,type,name", label.pattern="{0} {1} {2}")
+class Func {
+	
+	attr String visibility;
+	
+	attr String name;
+	
+	attr String type;
+	
+	@gmf.compartment
+	val Args[*] args;
+}
+
+
+@gmf.node(figure="rounded", label.icon="false", label="type, name", label.pattern="{0} {1}")
+class Args {
+	attr String type;
+	
+	attr String name;
+}

@@ -1,0 +1,52 @@
+var palette := GmfTool!Palette.all.first();
+
+var toolGroupPackage= new GmfTool!ToolGroup;
+toolGroupPackage.title := 'Package objects';
+
+var toolGroupClass= new GmfTool!ToolGroup;
+toolGroupClass.title := 'Class object';
+
+toolGroupPackage.collapsible := true;
+toolGroupClass.collapsible := true;
+
+palette.tools.add(toolGroupPackage);
+palette.tools.add(toolGroupClass);
+
+
+var toolGroupObjects = GmfTool!ToolGroup.all.selectOne(r|r.title = 'Objects');
+var toolGroupConnections = GmfTool!ToolGroup.all.selectOne(r|r.title = 'Connections');
+
+var toolEntry;
+toolEntry = toolGroupObjects.tools.selectOne(r|r.title = 'Package');
+toolGroupPackage.tools.add(toolEntry);
+
+toolEntry = toolGroupObjects.tools.selectOne(r|r.title = 'ClassNormalD');
+toolGroupPackage.tools.add(toolEntry);
+
+toolEntry = toolGroupObjects.tools.selectOne(r|r.title = 'ClassAbstractD');
+toolGroupPackage.tools.add(toolEntry);
+
+toolEntry = toolGroupConnections.tools.selectOne(r|r.title = 'Hierarchy');
+toolGroupPackage.tools.add(toolEntry);
+
+toolEntry = toolGroupConnections.tools.selectOne(r|r.title = 'Composition');
+toolGroupPackage.tools.add(toolEntry);
+
+toolEntry = toolGroupConnections.tools.selectOne(r|r.title = 'Aggregation');
+toolGroupPackage.tools.add(toolEntry);
+
+toolEntry = toolGroupConnections.tools.selectOne(r|r.title = 'Relationship');
+toolGroupPackage.tools.add(toolEntry);
+
+
+toolEntry = toolGroupObjects.tools.selectOne(r|r.title = 'Func');
+toolGroupClass.tools.add(toolEntry);
+
+toolEntry = toolGroupObjects.tools.selectOne(r|r.title = 'Var');
+toolGroupClass.tools.add(toolEntry);
+
+toolEntry = toolGroupObjects.tools.selectOne(r|r.title = 'Args');
+toolGroupClass.tools.add(toolEntry);
+
+palette.tools.remove(toolGroupObjects);
+palette.tools.remove(toolGroupConnections);

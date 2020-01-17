@@ -1,0 +1,698 @@
+context Diagram {
+
+	constraint uniquePackage {
+	
+		check {
+			var packageNames = self.packages;
+			var packagesToReplace = new Set();
+			
+			var count = 0;
+			for( p in packageNames) {
+				for( p2 in packageNames)
+					if(p <> p2 and p.name == p2.name) {
+						count++;
+						if(not packagesToReplace.exists( p3 | p3.name == p2.name))
+							packagesToReplace.add(p2);
+					}
+			}
+			
+			return count == 0;
+		} 
+		
+		message: "Each package must have an unique name."
+		
+		fix {
+		
+			title: "change package name"
+			
+			do {
+			
+			
+				var count = 2;
+				for( p in packagesToReplace) {
+					var package = packageNames.selectOne( p2 | p2 == p);
+					
+					while( count <> -1 ) {
+						var tempName = package.name + count.asString();
+						if(packageNames.exists( p2 | p2 == tempName)) {
+							count++;
+							continue;
+						}
+							
+						package.name = tempName;
+						count = -1;
+					}
+					
+					count = 2;
+				}
+			
+
+			}
+		
+		}
+	
+	}
+	
+}
+
+context Package {
+
+	constraint nullAttributes {
+	
+		check: self.name <> null
+		
+		message: "Each package must have a name."
+		
+		fix {
+		
+			title: "Change package"
+			
+			do {
+			
+				self.name = "Package";
+			
+			}
+		
+		}
+	
+	}
+	
+	constraint uniqueClass {
+	
+		check {
+			var classNames = self.classes;
+			var classToReplace = new Set();
+			
+			var count = 0;
+			for( c in classNames) {
+				for( c2 in classNames)
+					if( c <> c2 and c.name == c2.name) {
+						count++;
+						if(not classToReplace.exists( c3 | c3.name == c2.name))
+							classToReplace.add(c2);
+					}
+			}
+			
+			return count == 0;
+		} 
+		
+		message: "Each class must have an unique name per package."
+		
+		fix {
+		
+			title: "Change class name"
+			
+			do {
+			
+				var count = 2;
+				for( c in classToReplace) {
+					var class = classNames.selectOne( c2 | c2 == c);
+					
+					while( count <> -1 ) {
+						var tempName = class.name + count.asString();
+						
+						if(classNames.exists( c2 | c2.name == tempName)) {
+							count++;
+							continue;
+						}
+							
+						class.name = tempName;
+						count = -1;
+					}
+					
+					count = 2;
+				}
+			
+			}
+		
+		}
+	}
+	
+}
+
+context Transition {
+
+	constraint transitionWithItself {
+	
+		check: self.target <> self.source
+		
+		message: "You can't have a transition between the same class. Check class " + self.target.name + "."
+		
+		fix {
+		
+			title: "Remove Transition"
+			
+			do {
+			
+			 delete self;
+			 
+			}
+
+		}
+	}
+
+	constraint oneWayTransition {
+	
+		check {
+			var transitionNames = Transition.all().asBag();
+			
+			
+			var has = true;
+			for (t in transitionNames)
+				if(t <> self)
+					if(t.type().name == self.type().name and t.target.name == self.source.name and t.source.name == self.target.name) 
+						has = false;
+					
+			return has;
+		} 
+		
+		message: "There is another transition of " + self.type().name + " with the source as the target. Check Classes " + self.source.name + " and " + self.target.name + "."
+	}
+	
+	constraint mustHaveRelationship {
+	
+		check {
+			var RelationshipNames = Relationship.all().asBag();
+			
+			var has = false;
+			if(self.isTypeOf(Composition) or self.isTypeOf(Aggregation)) {
+				for (t in RelationshipNames)
+					if(t.target.name == self.source.name and t.source.name == self.target.name)
+						has = true;
+			} else
+				has = true;
+			
+			
+			return has;
+		} 
+		
+		message: "You must have a Relationship between " + self.target.name + " and " + self.source.name + "."
+	}
+
+}
+
+context Relation {
+	
+	constraint NotSameSourceAndTarget {
+	
+		check {
+			var relationNames = Relation.all().asBag();
+			
+			var has = true;
+			for (t in relationNames)
+				if(t <> self)
+					if((t.source.name == self.source.name and t.target.name == self.target.name) or (t.target.name == self.source.name and t.source.name == self.target.name)) 
+						has = false;
+					
+			return has;
+		} 
+		
+		message: "You can't have two relations between " + self.target.name + " and " + self.source.name + "."
+	}
+	
+	constraint correctNumbers {
+	
+		check {
+		
+			var numbers = new Set();
+			if( self.isTypeOf(Aggregation) or self.isTypeOf(Composition)) {
+        		numbers.add("1");
+        		numbers.add("*");
+        		numbers.add("0..1");
+        		numbers.add("0..*");
+        		numbers.add("1..*");
+			
+				return numbers.includes(self.sourceNumber) and numbers.includes(self.targetNumber);
+			}
+			
+			return true;
+		}
+		
+		message: "The " + self.type().name + " " + self.source.name + "->" + self.target.name + " has invalid source and target numbers."
+		
+		fix {
+		
+			title: "Set default values"
+			
+			do {
+			
+				if(not numbers.includes(self.sourceNumber))
+					self.sourceNumber = "*";
+				
+				
+				if(not numbers.includes(self.targetNumber))
+					self.targetNumber = "*";
+			
+			}
+		
+		}
+	
+	}
+
+}
+
+context Hierarchy {
+
+	constraint maxSuperclassNumber {
+	
+		check {
+			var hierarchyNames = Hierarchy.all().asBag();
+			
+			return hierarchyNames.select(c | c.source.name == self.source.name).size() == 1;
+		} 
+		
+		message: "Class " + self.source.name + " can only have one superclass."
+	}
+
+}
+
+context ClassD {
+
+	constraint nullAttributes {
+	
+		check: self.name <> null
+		
+		message: "Each class must have a name."
+		
+		fix {
+		
+			title: "Set class name"
+			
+			do {
+			
+				self.name = "Class";
+			
+			}
+		
+		}
+	
+	}
+
+	constraint uniqueVarName {
+		
+		check {
+			var varNames = new Set();
+			var vars = self.vars;
+			
+			for( v in vars) {
+				for( v2 in vars)
+					if(v.name == v2.name and v <> v2) {
+						varNames.add(v.name);
+					}
+			}
+			
+			return varNames.isEmpty();
+		} 
+		
+		message {
+		
+			var output = "";
+			
+			var count = 0;
+			for(v in varNames) {
+				if(count+1 == varNames.size())
+					output = output + "'" + v + "'";
+				else
+					output = output + "'" + v + "', ";
+				count++;
+			}
+				
+			return "There following variables in class " + self.name + " are duplicated: " + output + ".";
+		}
+		
+		fix {
+		
+			title: "Change variable name"
+			
+			do {
+			
+				var count = 2;
+				for( v in varNames) {
+					var varCurr = vars.selectOne( v2 | v2.name == v);
+					
+					while( count <> -1 ) {
+						var tempName = varCurr.name + count.asString();
+						if(vars.exists( v2 | v2.name == tempName)) {
+							count++;
+							continue;
+						}
+							
+						varCurr.name = tempName;
+						count = -1;
+					}
+					
+					count = 2;
+				}
+			
+			}
+		
+		}
+		
+	}
+	
+	constraint uniqueFunctionName {
+		
+		check {
+			var funcToReplace = new Set();
+			var functions = self.functions;
+			
+			for( f in functions) {
+				for( f2 in functions)
+					if(f.name == f2.name and f <> f2 and not funcToReplace.exists( f3 | f3.name == f2.name)) {
+						funcToReplace.add(f2);
+					}
+			}
+			
+			return funcToReplace.isEmpty();
+		} 
+		
+		message {
+		
+			var output = "";
+			
+			var count = 0;
+			for(f in funcToReplace) {
+				if(count+1 == funcToReplace.size())
+					output = output + "'" + f.name + "'";
+				else
+					output = output + "'" + f.name + "', ";
+				count++;
+			}
+				
+			return "There following functions in class " + self.name + " are duplicated: " + output + ".";
+		}
+		
+		fix {
+		
+			title: "Rename function name"
+			
+			do {
+			
+				var count = 2;
+				for( f in funcToReplace) {
+					var func = functions.selectOne( f2 | f2 == f);
+					
+					while( count <> -1 ) {
+						var tempName = func.name.substring(0, func.name.length()-2) + count.asString() + func.name.substring(func.name.length-2);
+						if(functions.exists( f2 | f2.name == tempName)) {
+							count++;
+							continue;
+						}
+							
+						func.name = tempName;
+						count = -1;
+					}
+					
+					count = 2;
+				}
+			
+			}
+		
+		}
+		
+	}
+}
+
+context Var {
+
+	constraint nullAttributes {
+	
+		check: self.name <> null or self.visibility <> null or self.type <> null
+		
+		message: "Each variable must have a name, a visibility and a type."
+		
+		fix {
+		
+			title: "Default values"
+			
+			do {
+			
+				self.visibility = "-";
+				self.type = "String";
+				self.name = "var";
+			
+			}
+		
+		}
+	
+	}
+
+    constraint validType {
+    
+    	guard: self.satisfies("nullAttributes")
+
+        check {
+        	var classNames = ClassD.all().name.asBag();
+        	var types = new Set();
+        	types.add("String");
+        	types.add("char");
+        	types.add("boolean");
+        	types.add("int");
+        	types.add("double");
+        	types.add("float");
+        	
+        	var collectionType = true;
+        	if(self.type.startsWith("Collection"))
+        		if(self.type.charAt(11) == "<" and self.type.endsWith(">"))
+        			collectionType = types.includes(collectionType.substring(11, type.length()-1));
+        		else
+        			collectionType = false;
+        	
+        	return (classNames.includes(self.type) or types.includes(self.type) or collectionType);
+        }
+
+        message: "Variable " + self.name + " has an invalid type: " + self.type + "."
+    }
+    
+    constraint validVisibility {
+    
+    	guard: self.satisfies("nullAttributes")
+    
+    	check: self.visibility == "-" or self.visibility == "+"
+    	
+    	message: "Variable " + self.name + " can only be private(-) or public(+)."
+    	
+    	fix {
+    	
+    		title: "Set default visibility"
+    		
+    		do {
+    			
+				self.visibility = "-";
+
+    		}
+    	}
+    }
+
+}
+
+context Func {
+
+	constraint nullAttributes {
+	
+		check: self.name <> null or self.visibility <> null or self.type <> null
+		
+		message: "Each function must have a name, a visibility and a type."
+		
+		fix {
+		
+			title: "Default values"
+			
+			do {
+			
+				self.visibility = "-";
+				self.type = "void";
+				self.name = "func()";
+			
+			}
+		
+		}
+	
+	}
+
+    constraint validType {
+    
+    	guard: self.satisfies("nullAttributes")
+
+        check {
+        	var classNames = ClassD.all().name.asBag();
+        	var types = new Set();
+        	types.add("String");
+        	types.add("char");
+        	types.add("boolean");
+        	types.add("int");
+        	types.add("double");
+        	types.add("float");
+        	types.add("void");
+        	
+        	var collectionType = true;
+        	if(self.type.startsWith("Collection"))
+        		if(self.type.charAt(11) == "<" and self.type.endsWith(">"))
+        			collectionType = types.includes(collectionType.substring(11, type.length()-1));
+        		else
+        			collectionType = false;
+        	
+        	return (classNames.includes(self.type) or types.includes(self.type) or collectionType);
+        }
+
+        message: "Function " + self.name + " has an invalid type: " + self.type + "."
+    }
+    
+    constraint validVisibility {
+    	
+    	guard: self.satisfies("nullAttributes")
+    
+    	check: self.visibility == "-" or self.visibility == "+"
+    	
+    	message: "Function " + self.name + " can only be private(-) or public(+)."
+    	
+    	fix {
+    	
+    		title: "Set default visibility"
+    		
+    		do {
+    			
+				self.visibility = "-";
+
+    		}
+    	}
+    }
+    
+    constraint hasParenteses {
+    
+    	guard: self.satisfies("nullAttributes")
+    
+    	check: self.name.endsWith("()")
+    	
+    	message: "The Function " + self.name + " needs to have Parenteses at the of the Function name. Example: " + self.name + "()"
+    	
+    	fix {
+    	
+    		title: "Add Parenteses"
+    		
+    		do {
+    			
+				self.name = self.name + "()";
+
+    		}
+    	
+    	}
+    
+    }
+    
+    constraint uniqueArgsName {
+		
+		check {
+			var argsToRename = new Set();
+			var args = self.args;
+			
+			for( a in args) {
+				for( a2 in args)
+					if(a.name == a2.name and a <> a2 and not argsToRename.exists( a3 | a3.name == a2.name)) {
+						argsToRename.add(a2);
+					}
+			}
+			
+			return argsToRename.isEmpty();
+		} 
+		
+		message {
+		
+			var output = "";
+			
+			var count = 0;
+			for(a in argsToRename) {
+				if(count+1 == argsToRename.size())
+					output = output + "'" + a.name + "'";
+				else
+					output = output + "'" + a.name + "', ";
+				count++;
+			}
+				
+			return "There following arguments in function " + self.name + " are duplicated: " + output + ".";
+		}
+		
+		fix {
+		
+			title: "Change argument name"
+			
+			do {
+			
+				var count = 2;
+				for( a in argsToRename) {
+					var argCurr = args.selectOne( a2 | a2 == a);
+					
+					while( count <> -1 ) {
+						var tempName = argCurr.name + count.asString();
+						if(args.exists( a2 | a2.name == tempName)) {
+							count++;
+							continue;
+						}
+							
+						argCurr.name = tempName;
+						count = -1;
+					}
+					
+					count = 2;
+				}
+			
+			}
+		
+		}
+		
+	}
+
+}
+
+context Args {
+
+	constraint nullAttributes {
+	
+		check: self.name <> null or self.type <> null
+		
+		message: "Each argument must have a name and a type."
+		
+		fix {
+		
+			title: "Default values"
+			
+			do {
+			
+				self.type = "String";
+				self.name = "arg";
+			
+			}
+		
+		}
+	
+	}
+
+    constraint validType {
+    
+    	guard: self.satisfies("nullAttributes")
+
+        check {
+        	var classNames = ClassD.all().name.asBag();
+        	var types = new Set();
+        	types.add("String");
+        	types.add("char");
+        	types.add("boolean");
+        	types.add("int");
+        	types.add("double");
+        	types.add("float");
+        	
+        	var collectionType = true;
+        	if(self.type.startsWith("Collection"))
+        		if(self.type.charAt(11) == "<" and self.type.endsWith(">"))
+        			collectionType = types.includes(collectionType.substring(11, type.length()-1));
+        		else
+        			collectionType = false;
+			
+        		
+        	return (classNames.includes(self.type) or types.includes(self.type) or collectionType);
+        }
+
+        message: "Argument " + self.name + " has an invalid type: " + self.type + "."
+    }
+    
+}

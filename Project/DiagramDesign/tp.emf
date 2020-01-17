@@ -1,0 +1,96 @@
+@namespace(uri="tp", prefix="tp")
+package tp;
+
+@gmf.diagram
+class Diagram {
+	val Package[*] packages;
+	val Transition[*] transitions;
+}
+
+@gmf.node(figure="rounded", label.icon="false", label="name", label.pattern="{0}", border.color="0,0,0")
+class Package {
+	attr String name;
+	
+	@gmf.compartment
+	val ClassD[*] classes;
+}
+
+abstract class Transition {
+	ref ClassD source;
+	ref ClassD target;
+}
+
+abstract class Relation extends Transition {
+	attr String sourceNumber; 
+	attr String targetNumber; 
+	attr String targetRole;
+	attr String sourceRole;
+	attr String relationName;
+}
+
+@gmf.link(source="source", target="target", target.decoration="closedarrow", source.decoration="none")
+class Hierarchy extends Transition {
+}
+
+@gmf.link(source="source", target="target", target.decoration="arrow", source.decoration="none")
+class Relationship extends Transition {
+}
+
+@gmf.link(source="source", target="target", target.decoration="arrow", source.decoration="filledrhomb", label="sourceNumber, targetNumber", label.pattern="{0}       {1}")
+class Composition extends Relation {
+}
+
+@gmf.link(source="source", target="target", target.decoration="arrow", source.decoration="rhomb", label="sourceNumber, targetNumber", label.pattern="{0}       {1}")
+class Aggregation extends Relation {
+}
+
+abstract class ClassD {
+	attr String name;
+	
+	@gmf.compartment
+	val Var[*] vars;
+	
+	@gmf.compartment
+	val Func[*] functions;
+	
+}
+
+@gmf.node(figure="rounded", label.icon="false", label="name", label.pattern="{0}", border.color="255,0,0")
+class ClassAbstractD extends ClassD {
+}
+
+@gmf.node(figure="rounded", label.icon="false", label="name", label.pattern="{0}")
+class ClassNormalD extends ClassD{
+}
+
+@gmf.node(figure="rounded", label.icon="false", label="visibility,name,type", label.pattern="{0}{1}:{2}")
+class Var {
+	
+	attr String visibility;
+	
+	attr String name;
+	
+	attr String type;
+	
+}
+
+@gmf.node(figure="rounded", label.icon="false", label="visibility,name,type", label.pattern="{0}{1}:{2}")
+class Func {
+	
+	attr String visibility;
+	
+	attr String name;
+	
+	attr String type;
+	
+	@gmf.compartment
+	val Args[*] args;
+}
+
+
+@gmf.node(figure="rounded", label.icon="false", label="type, name", label.pattern="{0} {1}")
+class Args {
+	attr String type;
+	
+	attr String name;
+}

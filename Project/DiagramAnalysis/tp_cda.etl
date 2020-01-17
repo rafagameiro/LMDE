@@ -1,0 +1,86 @@
+rule Package 
+    transform t : tp!Package 
+    to n : cda!Package {
+        n.name = t.name;
+        n.~class = t.classes.equivalent();
+    }
+
+rule ClassNormal
+    transform t : tp!ClassNormalD 
+    to n : cda!Class {
+        n.name = t.name;
+        n.attribute = t.vars.equivalent();
+        n.method = t.functions.equivalent();
+    }
+
+rule ClassAbstract
+    transform t : tp!ClassAbstractD
+    to n : cda!Class {
+        n.name = t.name;
+        n.attribute = t.vars.equivalent();
+        n.method = t.functions.equivalent();
+    }
+
+rule Vars
+    transform t : tp!Var
+    to n : cda!Attribute {
+        n.name = t.name;
+    }
+
+rule Funcs
+    transform t : tp!Func
+    to n : cda!Method {
+        n.name = t.name;
+    }
+
+rule Hierarchy
+    transform t : tp!Hierarchy
+    to n : cda!Extends {
+    	n.name = "H_"+t.source.equivalent().name+"_"+t.target.equivalent().name;
+        n.output = t.source.equivalent();
+        n.input = t.target.equivalent();
+    }
+
+rule Composition
+transform t : tp!Composition
+to n : cda!Association {
+
+    n.name = t.relationName;
+	n.source = t.source.equivalent();
+    n.target = t.target.equivalent();
+	if(t.sourceNumber.contains("*"))
+    	n.outputCardinality = -1;
+    else if(t.sourceNumber.contains("1"))
+    	n.outputCardinality = 1;
+    else
+    	n.outputCardinality = 0;
+    	
+    if(t.targetNumber.contains("*"))
+    	n.inputCardinality = -1;
+    else if(t.targetNumber.contains("1"))
+    	n.inputCardinality = 1;
+    else
+    	n.inputCardinality = 0;
+}
+
+rule Aggregation
+transform t : tp!Aggregation
+to n : cda!Association {
+
+    n.name = t.relationName;
+	n.source = t.source.equivalent();
+    n.target = t.target.equivalent();
+	if(t.sourceNumber.contains("*"))
+    	n.outputCardinality = -1;
+   else if(t.sourceNumber.contains("1"))
+    	n.outputCardinality = 1;
+    else
+    	n.outputCardinality = 0;
+    	
+    if(t.targetNumber.contains("*"))
+    	n.inputCardinality = -1;
+    else if(t.targetNumber.contains("1"))
+    	n.inputCardinality = 1;
+    else
+    	n.inputCardinality = 0;
+}

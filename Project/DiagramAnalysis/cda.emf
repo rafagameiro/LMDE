@@ -1,0 +1,65 @@
+@namespace(uri="cda", prefix="cda")
+package cda;
+
+@gmf.diagram
+class ClassDiagramAnalysis {
+  val Relation[*] relation;
+  val Package[*] ~package;
+}
+
+@gmf.node(label="name")
+class Class {
+  attr String name;
+
+  @gmf.compartment
+  val Attribute[*] attribute;
+
+  @gmf.compartment
+  val Method[*] method;
+}
+
+@gmf.node(label="name")
+class Method {
+  attr String name;
+}
+
+@gmf.node(label="name")
+class Attribute {
+  attr String name;
+}
+
+@gmf.node(label="name")
+class Package {
+  attr String name;
+
+  @gmf.compartment
+  val Class[*] ~class;
+  
+  @gmf.compartment
+  val Package[*] ~package;
+}
+
+@gmf.link(source="input", target="output", target.decoration="none", style="solid", width="2", label="inputCardinality, name, outputCardinality", label.pattern="{0},{1},{2}")
+class Association extends Relation {
+  ref Class[1] output;
+  ref Class[1] input;
+  attr int inputCardinality;
+  attr int outputCardinality;	
+}
+
+@gmf.link(source="input", target="output", target.decoration="closedarrow", style="solid", width="2", label="name")
+class Extends extends Relation {
+  ref Class[1] input;
+  ref Class[1] output;
+}
+
+abstract class Relation {
+  attr String name;
+}
+
+@gmf.link(source="association", target="class", target.decoration="none", style="dash", width="2", label="name")
+class Junction extends Relation {
+  ref Association[1] association;
+  ref Class[1] ~class;
+}
+

@@ -1,0 +1,11 @@
+[%
+
+var implementation : Template; 
+
+implementation = TemplateFactory.load("tp_use.egl");
+implementation.generate("DesignDiagram/tp.use");
+
+implementation = TemplateFactory.load("tp_Latex.egl");
+implementation.generate("DesignDiagram/tp.tex");
+
+%]

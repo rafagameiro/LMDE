@@ -1,0 +1,118 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{multirow}
+\usepackage{boldline}
+
+\title{Linguagens de Modelação para Domínios Especificos \\ Project Statistics}
+\author{António Ferraz \\ Rafael Gameiro}
+\date{November 2019}
+
+\begin{document}
+
+\maketitle
+\setcounter{page}{0}
+\thispagestyle{empty}
+
+\pagebreak
+\section*{EVL Rules and ETL Transformations}
+\subsection{EVL}
+
+For our project, we considered the following EVL rules:
+\begin{itemize}
+  
+\item There can only be one package with the same name
+\item Each Package must have a name
+\item There can only a class with the same name
+\item There is no possibility of a class having a transition to itself
+\item Two classes cannot have 2 different transitions in between themselves
+\item If there is a aggregation or composition the class has to have a relationship in the opposite direction
+\item A class can only have 1 superclass
+\item Each class must have a name
+\item No duplicate variables in a Class
+\item No duplicate functions in a Class
+\item Each variable must have a name, a visibility and a type.
+\item Each function must have a name, a visibility and a type.
+\item No duplicate arguments in a function
+\item Each argument must have a name and a type
+
+\end{itemize}
+
+\subsection{ETL}
+Our project has 2 types of transformations into 2 other models, into a Java Class Diagram model and into a Class Analysis Diagram. To the Java model there was no much difference other from now aggregations and compositions turn into collection variables on the source class. And for the Class Analysis Class Diagram it was only needed to transform into the correspondent elements, but with losing some specificity.
+
+\pagebreak
+\section*{Project Assumptions}
+
+For our project, we considered the following assumptions:
+\begin{itemize}
+  \item De maneira a simplificar os possiveis valores relativos à cardinalidade de uma associação (Composição ou Agregação), decidimos usar 5 valores possiveis: 0, 1, * 1..*, 0..*, 0..1.\\ Desta forma o utilizador terá alguma opção de escolha e ao mesmo tempo esta será mais limitada.
+  
+  \item Relativamente às Transformações Model-to-Code, assumimos que um Composição ou Agregação, ao ser convertida num modelo em Java seria representado como um conjunto de instancias da classe de origem.
+\end{itemize}
+
+
+\pagebreak
+\section*{Statistics}
+
+
+\vspace{5mm}
+\begingroup
+\def\arraystretch{2.2}%
+\begin{tabular}[]{V{4}p{8cm}|p{2cm}V{4}}
+  \hlineB{4}
+   \multicolumn{1}{V{4}p{8cm}V{4}}{\textbf{Statistics}} & \textbf{Values} \\
+  \hlineB{4}
+  \multicolumn{1}{V{4}p{8cm}V{4}}{Number of classes} & 3  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{Number of associations} & 1  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{Mean of Depth of inheritance} &  0.33333334 \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{Max of Depth of inheritance} & 1.0  \\
+  \hline
+  
+  \multicolumn{1}{V{4}p{8cm}}{Per class: Main} &   \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad The number of private methods} & 0  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $DAC^{[1]}$} & 0  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $DAC'^{[2]}$} & 0  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $SIZE^{[3]}$} & 2  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad Weighted Methods} & 0  \\
+  \multicolumn{1}{V{4}p{8cm}}{Per class: Manager} &   \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad The number of private methods} & 0  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $DAC^{[1]}$} & 0  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $DAC'^{[2]}$} & 0  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $SIZE^{[3]}$} & 2  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad Weighted Methods} & 0  \\
+  \multicolumn{1}{V{4}p{8cm}}{Per class: managerController} &   \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad The number of private methods} & 0  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $DAC^{[1]}$} & 0  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $DAC'^{[2]}$} & 0  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $SIZE^{[3]}$} & 1  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad Weighted Methods} & 0  \\
+  \hlineB{3}
+\end{tabular}
+\endgroup
+
+
+\vspace{5mm}
+\noindent {[1]}: The number of attributes in a class that have another class as their type\\
+{[2]}: The number of different classes that are used as types of attributes in a class\\
+{[3]}: The number of methods + The number of attributes\\
+
+\end{document}
+

@@ -1,0 +1,142 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{multirow}
+\usepackage{boldline}
+
+\title{Domain-Specific Modelling Languages \\ Project Statistics}
+\author{António Ferraz \\ Rafael Gameiro}
+\date{November 2019}
+
+\begin{document}
+
+\maketitle
+\setcounter{page}{0}
+\thispagestyle{empty}
+
+\pagebreak
+\section*{EVL Rules and ETL Transformations}
+\subsection{EVL}
+
+For our project, we considered the following EVL rules:
+\begin{itemize}
+  
+\item There can only be one package with the same name
+\item Each Package must have a name
+\item There can only a class with the same name
+\item There is no possibility of a class having a transition to itself
+\item Two classes cannot have 2 different transitions in between themselves
+\item If there is a aggregation or composition the class has to have a relationship in the opposite direction
+\item A class can only have 1 superclass
+\item Each class must have a name
+\item No duplicate variables in a Class
+\item No duplicate functions in a Class
+\item Each variable must have a name, a visibility and a type.
+\item Each function must have a name, a visibility and a type.
+\item No duplicate arguments in a function
+\item Each argument must have a name and a type
+
+\end{itemize}
+
+\subsection{ETL}
+Our project has 2 types of transformations into 2 other models, into a Java Class Diagram model and into a Class Analysis Diagram. To the Java model there was no much difference other from now aggregations and compositions turn into collection variables on the source class. And for the Class Analysis Class Diagram it was only needed to transform into the correspondent elements, but with losing some specificity.
+
+\pagebreak
+\section*{Project Assumptions}
+
+For our project, we considered the following assumptions:
+\begin{itemize}
+  \item We tried to simplify the possible values of cardinality (Composition and Aggregation) we user could choose, and we gave the user 5 possible choices of values: 0, 1, * 1..*, 0..*, 0..1.\\ 
+  This way, the user would have some margin to choose the correct cardinality, but at the same time those options would be limited.
+  
+  \item In the Model-to-Code transformations, we assumed that the Composition and Aggregation, being converted to a Java Model it would be represented as a collection of instances from the origin class.
+\end{itemize}
+
+
+\pagebreak
+\section*{Statistics}
+
+[%
+var hierarchyLength = new Bag;
+for(c in ClassD.all)
+	hierarchyLength.add(c.getMaxHierarchy(c));
+%]
+
+\vspace{5mm}
+\begingroup
+\def\arraystretch{2.2}%
+\begin{tabular}[]{V{4}p{8cm}|p{2cm}V{4}}
+  \hlineB{4}
+   \multicolumn{1}{V{4}p{8cm}V{4}}{\textbf{Statistics}} & \textbf{Values} \\
+  \hlineB{4}
+  \multicolumn{1}{V{4}p{8cm}V{4}}{Number of classes} & [%=ClassD.all.size()%]  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{Number of associations} & [%=Transition.all.size()%]  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{Mean of Depth of inheritance} &  [%=hierarchyLength.sum()/hierarchyLength.size()%] \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{Max of Depth of inheritance} & [%=hierarchyLength.max()%]  \\
+  \hline
+  
+ [% 
+ for(c in ClassD.all) {
+	var classes = ClassD.all.name;
+	var counterV = 0;
+	var counterH = 0;
+	var counterVar = 0;
+	var DAC = new Bag;
+	var DACflag = new Set;
+	var get = "get";
+	var set = "set";
+	for (m in c.functions) { 
+		if(m.visibility == "-")
+			counterV++;
+		
+		if(not(get.isSubstringOf(m.name) or set.isSubstringOf(m.name)))
+		counterH++;
+	}
+	
+	for (v in c.vars){ 
+		if(classes.includes(v.type)){
+			DAC.add(v.type);
+			DACflag.add(v.type);
+		} 
+	}
+	%]
+  \multicolumn{1}{V{4}p{8cm}}{Per class: [%=c.name%]} &   \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad The number of private methods} & [%=counterV%]  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $DAC^{[1]}$} & [%=DAC.size()%]  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $DAC'^{[2]}$} & [%=DACflag.size()%]  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad $SIZE^{[3]}$} & [%=(c.vars.size()+c.functions.size())%]  \\
+  \hline
+  \multicolumn{1}{V{4}p{8cm}V{4}}{\quad\quad Weighted Methods} & [%=counterH%]  \\
+  [%}%]
+  \hlineB{3}
+\end{tabular}
+\endgroup
+
+
+\vspace{5mm}
+\noindent {[1]}: The number of attributes in a class that have another class as their type\\
+{[2]}: The number of different classes that are used as types of attributes in a class\\
+{[3]}: The number of methods + The number of attributes\\
+
+\end{document}
+
+[%
+  operation tp!ClassD getMaxHierarchy(c : ClassD) : Real {
+	
+	var target = null;
+	for( h in Hierarchy.all)
+		if(h.source == c)
+			target = h.target;
+			
+	if(target == null)
+		return 0.0;
+			
+	return 1.0 + c.getMaxHierarchy(target);
+}
+%]

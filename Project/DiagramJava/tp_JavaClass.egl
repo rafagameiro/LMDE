@@ -1,0 +1,39 @@
+[%for(p in Package.all()) {%]
+[%if(p.classes.exists( c1 | c1 == root)) {%]
+package [%=p.name%];
+[%}%]
+[%}%]
+
+public [%if(root.isTypeOf(ClassAbstractD)) {%]abstract [%}%]class [%=root.name%] [%for(t in Hierarchy.all) {%][%if(t.source.name == root.name) {%] extends [%=t.target.name%][%}%][%}%] {
+
+	[%for(v in root.vars) {%]
+	[%=v.visibility%] [%=v.type%] [%=v.name%];
+	[%}%]
+
+	public [%=root.name%]() {
+	
+	}
+	[%for(f in root.functions) {%]
+	
+	[%=f.visibility%] [%=f.type%] [%=f.name.substring(0, f.name.length()-2)%]([% var count = 0; for(a in f.args) {%] [%if(count+1 == f.args.size()) {%][%=a.type%] [%=a.name%][% } else {%] [%=a.type%] [%=a.name%], [%} count++; }%]) {
+
+	[%
+	var returnName;
+	if(f.type == "int")
+		returnName = "0";
+	else if(f.type == "double")
+		returnName = "0.0";
+	else if(f.type == "float")
+		returnName = "0.0f";
+	else if(f.type == "char")
+		returnName = "0";
+	else if(f.type == "boolean")
+		returnName = "false";
+	else
+		returnName = "null";
+	
+	%][%if(f.type <> "void") {%]		return [%=returnName%];
+	[%}%]
+	}
+	[%}%]
+}

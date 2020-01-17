@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tpJava="tpJava">
+  <tpJava:Package name="default">
+    <classes xsi:type="tpJava:ClassNormalD" name="Main">
+      <vars visibility="private" name="ID" type="String"/>
+      <functions visibility="public" name="getID()" type="String"/>
+    </classes>
+  </tpJava:Package>
+  <tpJava:Package name="Storage">
+    <classes xsi:type="tpJava:ClassNormalD" name="manager">
+      <vars visibility="private" name="balance" type="double"/>
+      <functions visibility="public" name="getBalance()" type="double"/>
+    </classes>
+  </tpJava:Package>
+</xmi:XMI>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tp:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tp="tp">
+  <packages name="default">
+    <classes xsi:type="tp:ClassNormalD" name="Main">
+      <vars visibility="-" name="ID" type="String"/>
+      <functions visibility="+" name="getID" type="String"/>
+    </classes>
+  </packages>
+  <packages name="Controller">
+    <classes xsi:type="tp:ClassNormalD" name="Manager">
+      <vars visibility="-" name="balance" type="int"/>
+      <functions visibility="+" name="getBalance()" type="int"/>
+    </classes>
+    <classes xsi:type="tp:ClassNormalD" name="managerController">
+      <vars visibility="-" name="managerID" type="String"/>
+    </classes>
+  </packages>
+  <transitions xsi:type="tp:Hierarchy" source="//@packages.1/@classes.0" target="//@packages.1/@classes.1"/>
+</tp:Diagram>

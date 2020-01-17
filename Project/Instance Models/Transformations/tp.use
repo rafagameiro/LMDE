@@ -1,0 +1,27 @@
+model DesignDiagram
+
+--classes 
+
+class Main
+attributes
+	ID : String
+operations
+	get() : String
+end
+
+class Manager < managerController
+attributes
+	balance : int
+operations
+	getBalance() : int
+end
+
+class managerController
+attributes
+	managerID : String
+operations
+end
+
+--associations
+
+
